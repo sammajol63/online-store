@@ -10,7 +10,9 @@ export const fetchProduct = createAsyncThunk(
   "products/fetchProduct",
   async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/product/fetch");
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/product/fetch`
+      );
       const result = await res.json();
       return result.data;
     } catch (error) {
@@ -23,10 +25,13 @@ export const detailProduct = createAsyncThunk(
   "products/detailProduct",
   async (id: string | null, { rejectWithValue }) => {
     try {
-      const res = await fetch("/api/detailProduct/", {
-        method: "POST",
-        body: JSON.stringify(id),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/detailProduct/`,
+        {
+          method: "POST",
+          body: JSON.stringify(id),
+        }
+      );
       const result = await res.json();
 
       return result;
@@ -40,10 +45,13 @@ export const detailProduct = createAsyncThunk(
 export const purchaseOrder = createAsyncThunk(
   "delivery/purchase/",
   async (email: string | null) => {
-    const res = await fetch("/api/purchase", {
-      method: "POST",
-      body: JSON.stringify(email),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/purchase`,
+      {
+        method: "POST",
+        body: JSON.stringify(email),
+      }
+    );
 
     const result = await res.json();
     return result;
@@ -67,13 +75,16 @@ export const fetchDeliveries = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const res = await fetch("http://localhost:3000/api/delivery/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application.json",
-        },
-        body: JSON.stringify({ email, transaction_id }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/delivery/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application.json",
+          },
+          body: JSON.stringify({ email, transaction_id }),
+        }
+      );
       const data = res.json();
 
       return data;
@@ -99,11 +110,14 @@ export const DeleteProductCart = createAsyncThunk(
   "products/deleteCart",
   async ({ user_id, product_id }: DLT) => {
     try {
-      const res = await fetch("/api/deleteProductCart/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id, product_id }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/deleteProductCart/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user_id, product_id }),
+        }
+      );
 
       const result = await res.json();
       const data = result.data;
@@ -119,11 +133,14 @@ export const UpdateQty = createAsyncThunk(
   "products/updateQty",
   async ({ user_id, operation, product_id }: QTY) => {
     try {
-      const res = await fetch("/api/updateQty/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ user_id, operation, product_id }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/updateQty/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ user_id, operation, product_id }),
+        }
+      );
 
       const result = await res.json();
 
@@ -140,13 +157,16 @@ export const cartDB = createAsyncThunk(
   "products/fetchCartDB",
   async ({ email }: { email: string }, { rejectWithValue }) => {
     try {
-      const res = await fetch("/api/fetchCarts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/fetchCarts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        }
+      );
       const dataProduct = await res.json();
 
       return dataProduct.data;
@@ -192,7 +212,7 @@ export const addToCartDB = createAsyncThunk<CartAPI, ProductCarts>(
   "product/addToCartDB",
   async (item, { rejectWithValue }) => {
     try {
-      const res = await fetch("/api/cart/", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cart/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -244,6 +264,7 @@ export interface CounterState {
   isLoading: boolean;
   logout: boolean;
   hasFetchedPurchase: boolean;
+  tempQty: number;
 }
 
 const initialState: CounterState = {
@@ -260,12 +281,16 @@ const initialState: CounterState = {
   isLoading: false,
   logout: false,
   hasFetchedPurchase: false,
+  tempQty: 0,
 };
 
 export const counterSlice = createSlice({
   name: "counter",
   initialState,
   reducers: {
+    setTempQuantity: (state, action) => {
+      state.tempQty = action.payload;
+    },
     setConfirm: (state, action) => {
       state.confirm = action.payload;
     },
@@ -457,6 +482,7 @@ export const {
   setIsNear,
   setConfirm,
   setLogout,
+  setTempQuantity,
 } = counterSlice.actions;
 
 export default counterSlice.reducer;

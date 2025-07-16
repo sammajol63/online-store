@@ -2,7 +2,7 @@
 
 import { SessionProvider } from "next-auth/react";
 import { Provider } from "react-redux";
-import { store } from "./store/page";
+import { store } from "@/store";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (

@@ -4,13 +4,14 @@ import {
   cartDB,
   detailProduct,
 } from "@/features/counter/counterSlice";
-import { RootState } from "@/app/store/page";
+import { RootState } from "@/store";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { setTempQuantity } from "@/features/counter/counterSlice";
 
 import { useParams } from "next/navigation";
 import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/app/store/page";
+import type { AppDispatch } from "@/store";
 import Image from "next/image";
 import { AiOutlineLoading } from "react-icons/ai";
 
@@ -97,6 +98,10 @@ export default function DetailProduct() {
     }
   }, [id, dispatch]);
 
+  useEffect(() => {
+    dispatch(setTempQuantity(tempQty));
+  }, [tempQty, dispatch]);
+
   return (
     <div className="flex justify-center h-full w-screen pt-28">
       {isLoading || !product ? (
@@ -158,7 +163,7 @@ export default function DetailProduct() {
                 <span>Subtotal </span>
                 <span>{formatRupiah(total)}</span>
               </div>
-              <PayAndAddress TempQty={tempQty} />
+              <PayAndAddress />
             </div>
           </div>
         </div>

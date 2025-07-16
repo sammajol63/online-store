@@ -1,5 +1,5 @@
 "use client";
-import { AppDispatch, RootState } from "@/app/store/page";
+import { AppDispatch, RootState } from "@/store";
 import {
   purchaseOrder,
   setModalDetailTransaction,

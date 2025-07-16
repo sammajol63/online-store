@@ -3,8 +3,8 @@ import L from "leaflet";
 import { useEffect, useRef, useState } from "react";
 import { distance } from "@turf/turf";
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch } from "../store/page";
-import { RootState } from "../store/page";
+import type { AppDispatch } from "@/store/index";
+import { RootState } from "@/store/index";
 import { useSession } from "next-auth/react";
 import { Session } from "next-auth";
 import {
@@ -191,7 +191,7 @@ export default function Courier({ routeCoords, destination }: Props) {
   const route = useRouter();
 
   const handleConfirm = async () => {
-    await fetch("/api/confirmDelivery", {
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/confirmDelivery`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ transaction_id: delivery[0].transaction_id }),

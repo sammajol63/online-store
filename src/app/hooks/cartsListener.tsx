@@ -7,7 +7,7 @@ import {
 } from "firebase/firestore";
 import { updateCart } from "@/features/counter/counterSlice";
 import app from "@/lib/firebase/init";
-import { AppDispatch } from "../store/page";
+import { AppDispatch } from "@/store/index";
 const firestore = getFirestore(app);
 
 export default function cartsListener(user_id: string, dispatch: AppDispatch) {

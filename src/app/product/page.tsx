@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useSession } from "next-auth/react";
-import type { RootState } from "../store/page";
+import type { RootState } from "@/store/index";
 import { useSelector, useDispatch } from "react-redux";
 import {
   addToCartDB,
@@ -10,7 +10,7 @@ import {
   fetchProduct,
 } from "@/features/counter/counterSlice";
 import { Session } from "next-auth";
-import type { AppDispatch } from "../store/page";
+import type { AppDispatch } from "@/store/index";
 import CartPage from "./cartPage";
 import Image from "next/image";
 import Link from "next/link";
@@ -74,6 +74,7 @@ export default function FetchProduct() {
     const syncCart = async () => {
       const getItem = localStorage.getItem("cart");
       const result = getItem ? JSON.parse(getItem) : [];
+      console.log(result);
 
       if (result.length > 0) {
         const cartWithUser = result.map((item: ProductCarts) => ({
@@ -81,7 +82,7 @@ export default function FetchProduct() {
           user_id: session?.user?.email,
         }));
 
-        await fetch("/api/cart/", {
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/cart/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

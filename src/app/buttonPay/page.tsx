@@ -3,7 +3,7 @@ import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "../store/page";
+import { RootState } from "@/store/index";
 
 type SuggestionItem = {
   addresstype: string;
@@ -40,11 +40,12 @@ interface MidtransResult {
   pdf_url?: string;
 }
 
-export default function PayAndAddress({ TempQty }: { TempQty: number }) {
+export default function PayAndAddress() {
   const [searchAlamat, setSearchAlamat] = useState("");
   const [suggestions, setSuggestions] = useState<SuggestionItem[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [token, setToken] = useState("");
+  const TempQty = useSelector((state: RootState) => state.counter.tempQty);
 
   const [selected, setSelected] = useState<{
     lat: number;
@@ -121,27 +122,30 @@ export default function PayAndAddress({ TempQty }: { TempQty: number }) {
     setIsProcessing(true);
     const name = session?.user?.name;
     const email = session?.user?.email;
-    const res = await fetch("/api/midtrans/token", {
-      method: "POST",
-      body: JSON.stringify({
-        name: name,
-        email: email,
-        address: searchAlamat,
-        lat: selected?.lat,
-        lon: selected?.lon,
-        cart: [
-          {
-            name: product?.name,
-            price: product?.price,
-            qty: TempQty > 0 ? TempQty : product?.qty,
-            product_id: product?.id,
-          },
-        ],
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/midtrans/token`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          address: searchAlamat,
+          lat: selected?.lat,
+          lon: selected?.lon,
+          cart: [
+            {
+              name: product?.name,
+              price: product?.price,
+              qty: TempQty > 0 ? TempQty : product?.qty,
+              product_id: product?.id,
+            },
+          ],
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const data = await res.json();
 

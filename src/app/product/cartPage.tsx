@@ -5,9 +5,9 @@ import {
   setModal,
   UpdateQty,
 } from "@/features/counter/counterSlice";
-import { RootState } from "../store/page";
+import { RootState } from "@/store/index";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../store/page";
+import { AppDispatch } from "@/store/index";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Session } from "next-auth";
@@ -138,20 +138,23 @@ export default function CartPage(isOpen: { isOpen: boolean }) {
     setIsProcessing(true);
     const name = session?.user?.name;
     const email = session?.user?.email;
-    const res = await fetch("/api/midtrans/token", {
-      method: "POST",
-      body: JSON.stringify({
-        name: name,
-        email: email,
-        address: searchAlamat,
-        lat: selected?.lat,
-        lon: selected?.lon,
-        cart: productAvailable,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/midtrans/token`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          address: searchAlamat,
+          lat: selected?.lat,
+          lon: selected?.lon,
+          cart: productAvailable,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     const data = await res.json();
 

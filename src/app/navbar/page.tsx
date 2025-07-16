@@ -1,7 +1,8 @@
+"use client";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Session } from "next-auth";
-import type { AppDispatch, RootState } from "../store/page";
+import type { AppDispatch, RootState } from "@/store/index";
 import { useDispatch, useSelector } from "react-redux";
 import {
   cartDB,
