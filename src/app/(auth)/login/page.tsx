@@ -5,7 +5,7 @@ import LoginContent from "./loginContent";
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div>Loading Login...</div>}>
+    <Suspense fallback={<div>null</div>}>
       <LoginContent />
     </Suspense>
   );
