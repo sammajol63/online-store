@@ -39,7 +39,7 @@ interface SuggestionItem {
 export default function CartPage(isOpen: { isOpen: boolean }) {
   const cart = useSelector((state: RootState) => state.counter.cart);
   const products = useSelector((state: RootState) => state.counter.products);
-  const error = useSelector((state: RootState) => state.counter.error);
+  const error = useSelector((state: RootState) => state.counter.isError);
 
   const { data: session } = useSession() as {
     data: Session | null;
@@ -231,8 +231,8 @@ export default function CartPage(isOpen: { isOpen: boolean }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60">
-      <div className="bg-white max-w-[750px] max-h-[90vh] p-8 rounded">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-4 overflow-auto">
+      <div className="bg-white w-full max-w-[750px] max-h-[90vh] overflow-y-auto p-4 sm:p-8 rounded">
         <div className="flex justify-between pb-2">
           <div>
             <span className="font-bold">Cart</span>
@@ -254,10 +254,10 @@ export default function CartPage(isOpen: { isOpen: boolean }) {
           <table className="text-center w-full table-fixed ">
             <thead className="bg-gray-100 text-sm uppercase font-bold">
               <tr>
-                <th className=" px-2 py-2">Name</th>
-                <th className=" w-10">QTY</th>
-                <th className=" px-2">Price</th>
-                <th className=" px-2">ACTION</th>
+                <th className=" px-2 py-2 w-48">Name</th>
+                <th className=" w-28">QTY</th>
+                <th className=" px-2 w-40">Price</th>
+                <th className=" px-2 w-32">ACTION</th>
               </tr>
             </thead>
           </table>
@@ -280,19 +280,18 @@ export default function CartPage(isOpen: { isOpen: boolean }) {
                       <tr key={index}>
                         <td
                           title={product.name}
-                          className="border-b border-gray-300 px-2 py-2 truncate w-30"
+                          className="border-b w-48 border-gray-300 px-2 py-2 truncate"
                         >
                           {product.name}
                         </td>
-                        <td className="border-b border-gray-300 px-2">
+                        <td className="border-b border-gray-300 px-2 w-28">
                           {product.qty}
                         </td>
-                        <td className="border-b border-gray-300 px-2">
+                        <td className="border-b border-gray-300 px-2 w-40">
                           {formatRupiah(product.price * product.qty)}
                         </td>
-                        <td className="border-b border-gray-300 ">
-                          {" "}
-                          <div className="px-10 gap-x-2 flex flex-row justify-center">
+                        <td className="border-b border-gray-300 w-32 ">
+                          <div className="gap-x-2 flex flex-row justify-center items-center">
                             <button
                               onClick={() => {
                                 dispatch(
@@ -352,24 +351,23 @@ export default function CartPage(isOpen: { isOpen: boolean }) {
                         <td className="border-b border-gray-300 px-2">
                           {formatRupiah(product.price * product.qty)}
                         </td>
-                        <td className="border-b border-gray-300 px-2 flex py-2 gap-x-2 justify-center items-center">
-                          <span className="text-[10px]">
+                        <td className="border-b w-32 border-gray-300 px-2 py-2 gap-x-2">
+                          <div className="flex justify-center items-center flex-row text-[10px]">
                             Product tidak tersedia
-                          </span>
-
-                          <button
-                            className="w-5 cursor-pointer text-xl font-bold text-red-500"
-                            onClick={() =>
-                              dispatch(
-                                DeleteProductCart({
-                                  user_id: product.user_id,
-                                  product_id: product.product_id,
-                                })
-                              )
-                            }
-                          >
-                            <MdDelete />
-                          </button>
+                            <button
+                              className="w-5 cursor-pointer text-xl font-bold text-red-500"
+                              onClick={() =>
+                                dispatch(
+                                  DeleteProductCart({
+                                    user_id: product.user_id,
+                                    product_id: product.product_id,
+                                  })
+                                )
+                              }
+                            >
+                              <MdDelete />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}

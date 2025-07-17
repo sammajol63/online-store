@@ -13,7 +13,7 @@ import { useParams } from "next/navigation";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store";
 import Image from "next/image";
-import { AiOutlineLoading } from "react-icons/ai";
+import { FiLoader } from "react-icons/fi";
 
 import PayAndAddress from "@/app/buttonPay/page";
 import CartPage from "../cartPage";
@@ -33,7 +33,9 @@ export default function DetailProduct() {
   const modal = useSelector((state: RootState) => state.counter.modal);
   const [total, setTotal] = useState(0);
   const [tempQty, setTempQty] = useState(1);
-  const isLoading = useSelector((state: RootState) => state.counter.isLoading);
+  const isLoading = useSelector(
+    (state: RootState) => state.counter.isLoadingProductDetail
+  );
 
   const dispatch = useDispatch<AppDispatch>();
   const product = useSelector(
@@ -105,16 +107,16 @@ export default function DetailProduct() {
   return (
     <div className="flex justify-center h-full w-screen pt-28">
       {isLoading || !product ? (
-        <AiOutlineLoading className="mt-36 text-9xl font-gray-300 text-green-500 rounded animate-spin" />
+        <FiLoader className="mt-36 text-[120px] font-gray-300 text-gray-500 rounded animate-spin" />
       ) : (
         <div className="flex justify-center gap-x-6 flex-row h-full w-[1200px] mt-2">
           <div>
             {product?.image && (
               <Image
                 src={product.image}
-                alt={"product image"}
-                className="rounded-lg object-cover w-[310px] border border-gray-300"
-                width={200}
+                alt="product image"
+                className="rounded-lg object-contain w-[310px] h-[400px] border border-gray-300 bg-white"
+                width={310}
                 height={200}
                 loading="lazy"
               />

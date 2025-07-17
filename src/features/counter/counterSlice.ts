@@ -222,7 +222,6 @@ export const addToCartDB = createAsyncThunk<CartAPI, ProductCarts>(
 
       const data = await res.json();
 
-      console.log(data.cartItem);
       return data.cartItem;
     } catch (error) {
       return rejectWithValue(error);
@@ -255,7 +254,7 @@ export interface CounterState {
   products: Products[];
   detailProduct: Products | null;
   modal: boolean;
-  error: string;
+  isError: string | null;
   modalDetailTransaction: boolean;
   delivery: Delivery[];
   purchase: Array<Purchase> | null;
@@ -265,6 +264,10 @@ export interface CounterState {
   logout: boolean;
   hasFetchedPurchase: boolean;
   tempQty: number;
+  isLoadingProduct: boolean;
+  isLoadingCart: boolean;
+  isLoadingProductDetail: boolean;
+  isLoadingPurchase: boolean;
 }
 
 const initialState: CounterState = {
@@ -272,7 +275,7 @@ const initialState: CounterState = {
   products: [],
   detailProduct: null,
   modal: false,
-  error: "",
+  isError: null,
   modalDetailTransaction: false,
   delivery: [],
   purchase: null,
@@ -282,6 +285,10 @@ const initialState: CounterState = {
   logout: false,
   hasFetchedPurchase: false,
   tempQty: 0,
+  isLoadingProduct: false,
+  isLoadingCart: false,
+  isLoadingProductDetail: false,
+  isLoadingPurchase: false,
 };
 
 export const counterSlice = createSlice({
@@ -305,34 +312,6 @@ export const counterSlice = createSlice({
     },
     setProducts: (state, action: PayloadAction<Products[]>) => {
       state.products = action.payload;
-    },
-    incrementQty: (state, action) => {
-      const item = state.cart.find(
-        (el) =>
-          el.user_id === action.payload.user_id &&
-          el.product_id === action.payload.product_id
-      );
-      if (item) {
-        item.qty++;
-      } else {
-        console.log("item kosong");
-      }
-    },
-    decrementQty: (state, action) => {
-      const item = state.cart.find(
-        (el) =>
-          el.user_id === action.payload.user_id &&
-          el.product_id === action.payload.product_id
-      );
-
-      if (item) {
-        const currentData = item.qty;
-        if (currentData === 1) {
-          item.qty = 1;
-        } else {
-          item.qty = currentData - 1;
-        }
-      }
     },
     addToCart: (state, action) => {
       const itemInCart = state.cart.find(
@@ -367,18 +346,38 @@ export const counterSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(cartDB.pending, (state) => {
+      state.isLoadingCart = true;
+      state.isError = null;
+    });
     builder.addCase(cartDB.fulfilled, (state, action) => {
+      state.isLoadingCart = false;
       state.cart = action.payload;
     });
-    builder.addCase(fetchProduct.pending, (state) => {
-      state.isLoading = true;
-    });
-    builder.addCase(fetchProduct.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.products = action.payload;
+    builder.addCase(cartDB.rejected, (state) => {
+      state.isLoadingCart = false;
+      state.isError = "Failed to cartDB";
     });
 
+    builder.addCase(fetchProduct.pending, (state) => {
+      state.isLoadingProduct = true;
+      state.isError = null;
+    });
+    builder.addCase(fetchProduct.fulfilled, (state, action) => {
+      state.isLoadingProduct = false;
+      state.products = action.payload;
+    });
+    builder.addCase(fetchProduct.rejected, (state) => {
+      state.isLoadingProduct = false;
+      state.isError = "Failed to fetch Product";
+    });
+
+    builder.addCase(UpdateQty.pending, (state) => {
+      state.isLoading = true;
+      state.isError = null;
+    });
     builder.addCase(UpdateQty.fulfilled, (state, action) => {
+      state.isLoading = false;
       const product = state.cart.find(
         (item) =>
           item.user_id === action.payload?.result?.data?.user_id &&
@@ -387,10 +386,20 @@ export const counterSlice = createSlice({
       if (product) {
         product.qty = action.payload?.result.data.qty;
       } else {
-        state.error = action.payload?.result.message;
+        state.isError = action.payload?.result.message;
       }
     });
+    builder.addCase(UpdateQty.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = "Failed to Update quantity";
+    });
+
+    builder.addCase(DeleteProductCart.pending, (state) => {
+      state.isLoading = true;
+      state.isError = null;
+    });
     builder.addCase(DeleteProductCart.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.cart = state.cart.filter(
         (data) =>
           !(
@@ -399,20 +408,43 @@ export const counterSlice = createSlice({
           )
       );
     });
+    builder.addCase(DeleteProductCart.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = "Failed to delete";
+    });
+
+    builder.addCase(fetchDeliveries.pending, (state) => {
+      state.isLoading = true;
+      state.isError = null;
+    });
     builder.addCase(fetchDeliveries.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.delivery = action.payload.data;
     });
+    builder.addCase(fetchDeliveries.rejected, (state) => {
+      state.isLoading = false;
+      state.isError = "Failed to fetch Delivery";
+    });
+
     builder.addCase(detailProduct.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingProductDetail = true;
+      state.isError = null;
     });
     builder.addCase(detailProduct.fulfilled, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingProductDetail = false;
       state.detailProduct = action.payload.data;
     });
+    builder.addCase(detailProduct.rejected, (state) => {
+      state.isLoadingProductDetail = false;
+      state.isError = "Failed to Fetch detail product";
+    });
+
     builder.addCase(purchaseOrder.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingPurchase = true;
+      state.isError = null;
     });
     builder.addCase(purchaseOrder.fulfilled, (state, action) => {
+      state.isLoadingPurchase = false;
       interface Pur {
         order_id: string;
         created_at: Timestamp;
@@ -464,17 +496,18 @@ export const counterSlice = createSlice({
           });
         }
       }
-      state.isLoading = false;
+      state.isLoadingPurchase = false;
       state.purchase = resultDataTransaction;
       state.hasFetchedPurchase = true;
+    });
+    builder.addCase(purchaseOrder.rejected, (state) => {
+      state.isLoadingPurchase = false;
+      state.isError = "Failed to Purchase Order";
     });
   },
 });
 
-// Action creators are generated for each case reducer function
 export const {
-  incrementQty,
-  decrementQty,
   addToCart,
   setModal,
   setModalDetailTransaction,

@@ -242,15 +242,17 @@ export async function purchase(email: string) {
       })
     ) as (Purchase & { id: string })[];
 
-    const productImg = [];
+    // const productImg = [];
 
-    for (const transc of resultTransaction) {
-      for (const items of transc.items) {
-        const docRef = doc(firestore, "products", items.id);
-        const tempImageSnap = await getDoc(docRef);
-        productImg.push(tempImageSnap.data());
-      }
-    }
+    const productImgPromises = resultTransaction.flatMap((transc) =>
+      transc.items.map((item) => {
+        const docRef = doc(firestore, "products", item.id);
+        return getDoc(docRef);
+      })
+    );
+
+    const imageSnaps = await Promise.all(productImgPromises);
+    const productImg = imageSnaps.map((snap) => snap.data());
 
     const qDelivery = query(
       collection(firestore, "deliveries"),

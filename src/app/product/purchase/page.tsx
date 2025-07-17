@@ -19,7 +19,9 @@ export default function PurchasePage() {
   const [idOrder, setIdOrder] = useState("");
   const modal = useSelector((state: RootState) => state.counter.modal);
   const router = useRouter();
-  const isLoading = useSelector((state: RootState) => state.counter.isLoading);
+  const isLoading = useSelector(
+    (state: RootState) => state.counter.isLoadingPurchase
+  );
   const modalDetailTransaction = useSelector(
     (state: RootState) => state.counter.modalDetailTransaction
   );
@@ -68,7 +70,6 @@ export default function PurchasePage() {
 
   const filterData = (purchaseProduct ? [...purchaseProduct] : [])?.sort(
     (a, b) => {
-      // 1. Prioritaskan status "dalam pengiriman"
       if (a.status === "Dalam pengiriman" && b.status !== "Dalam pengiriman") {
         return -1;
       }
@@ -76,9 +77,6 @@ export default function PurchasePage() {
         return 1;
       }
       return 0;
-
-      // 2. Kalau status sama, urutkan berdasarkan created_at terbaru
-      // return b.created_at.toDate().getTime() - a.created_at.toDate().getTime();
     }
   );
 

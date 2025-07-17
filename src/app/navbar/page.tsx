@@ -65,9 +65,18 @@ export default function NavbarPage() {
             )}
           </div>
           <span className="text-gray-300 font-bold">|</span>
-
           <div className="relative inline-block text-left group">
-            <button className="cursor-pointer">{session?.user?.name}</button>
+            {status === "loading" ? (
+              <div className="h-10 flex items-center justify-center">
+                <span className="inline-block pt-4 cursor-pointer animate-pulse w-24 h-4 bg-gray-500" />
+              </div>
+            ) : !session ? (
+              <div className="cursor-pointer bg-gray-300 w-24 animate-pulse">
+                Guest
+              </div>
+            ) : (
+              <button className="cursor-pointer">{session.user?.name}</button>
+            )}
             <div className="flex justify-center py-2 px-3 gap-y-2 items-center flex-col absolute left-0 w-[400px] -translate-x-[330px] bg-white border border-gray-300 rounded shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-opacity duration-200">
               <div className="border border-gray-300 w-full h-10 rounded flex items-center justify-center text-center gap-x-2">
                 <span>
@@ -102,7 +111,7 @@ export default function NavbarPage() {
       </div>
       {logout && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-white rounded-lg p-5 shadow-md text-center flex flex-col gap-y-4 py-4 px-4">
+          <div className="bg-white rounded-lg p-5 shadow-md text-center flex flex-col gap-y-4 py-8 px-10">
             <span>Anda ingin Logout?</span>
             <div className="flex justify-center space-x-6">
               <button
@@ -110,17 +119,17 @@ export default function NavbarPage() {
                   dispatch(setLogout(false));
                   signOut({ callbackUrl: "/login" });
                 }}
-                className="bg-red-600 text-white px-4 py-2 rounded cursor-pointer"
+                className="bg-red-600 text-white px-4 py-2 text-sm rounded cursor-pointer"
               >
-                Ya
+                Yes
               </button>
               <button
                 onClick={() => {
                   dispatch(setLogout(false));
                 }}
-                className="bg-red-600 text-white px-4 py-2 rounded cursor-pointer"
+                className="bg-gray-400 text-white px-4 py-2 text-sm rounded cursor-pointer"
               >
-                Tidak
+                No
               </button>
             </div>
           </div>

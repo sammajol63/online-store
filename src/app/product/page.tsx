@@ -34,7 +34,9 @@ export default function FetchProduct() {
   const dispatch = useDispatch<AppDispatch>();
   const { cart, products } = useSelector((state: RootState) => state.counter);
   const modal = useSelector((state: RootState) => state.counter.modal);
-  const isLoading = useSelector((state: RootState) => state.counter.isLoading);
+  const isLoading = useSelector(
+    (state: RootState) => state.counter.isLoadingProduct
+  );
 
   const refLocalStorage = useRef(true);
   const refSyncCart = useRef(false);
@@ -47,11 +49,6 @@ export default function FetchProduct() {
   useEffect(() => {
     dispatch(fetchProduct());
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   const email = session?.user?.email ?? null;
-  //   dispatch(fetchDeliveries(email));
-  // }, [dispatch, session?.user?.email]);
 
   useEffect(() => {
     setResult(products);
@@ -74,7 +71,6 @@ export default function FetchProduct() {
     const syncCart = async () => {
       const getItem = localStorage.getItem("cart");
       const result = getItem ? JSON.parse(getItem) : [];
-      console.log(result);
 
       if (result.length > 0) {
         const cartWithUser = result.map((item: ProductCarts) => ({
@@ -165,7 +161,7 @@ export default function FetchProduct() {
                   loading="lazy"
                 />
                 <div className="flex justify-between items-center gap-1 w-full pt-1.5 pb-1.5">
-                  <span className="text-sm  truncate block w-[110px]">
+                  <span className="text-sm truncate block w-[110px]">
                     {products.name}
                   </span>
                   <span className="text-sm font-bold whitespace-nowrap">

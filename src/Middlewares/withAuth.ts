@@ -6,6 +6,13 @@ import {
   NextResponse,
 } from "next/server";
 
+function matchPath(pattern: string, path: string) {
+  const regex = new RegExp(
+    "^" + pattern.replace(/:[^\/]+/g, "[^/]+").replace("*", ".*") + "$"
+  );
+  return regex.test(path);
+}
+
 // const onlyAdminPage = ["/dashboard"];
 const authPage = ["/login", "/"];
 
@@ -16,7 +23,13 @@ export default function withAuth(
   return async (req: NextRequest, next: NextFetchEvent) => {
     const pathname = req.nextUrl.pathname;
 
-    if (requiredAuth.includes(pathname)) {
+    if (
+      requiredAuth.some((route) =>
+        route.includes(":") // pattern match
+          ? matchPath(route, pathname)
+          : pathname === route || pathname.startsWith(route + "/")
+      )
+    ) {
       const token = await getToken({
         req,
         secret: process.env.NEXTAUTH_SECRET,
@@ -24,7 +37,8 @@ export default function withAuth(
 
       if (!token && !authPage.includes(pathname)) {
         const url = new URL("/login", req.url); //ini url tujuan klw mau akses product tp belum login
-        url.searchParams.set("callbackUrl", encodeURI(req.url)); // ini utk seumpamanya sudah login maka di alihkan langsung ke halaman yg di tuju sebelum login
+        const callbackUrl = req.nextUrl.pathname + req.nextUrl.search;
+        url.searchParams.set("callbackUrl", callbackUrl); // ini utk seumpamanya sudah login maka di alihkan langsung ke halaman yg di tuju sebelum login
 
         return NextResponse.redirect(url);
       }

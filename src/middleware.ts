@@ -6,4 +6,11 @@ export function mainMiddleware() {
   return res;
 }
 
-export default withAuth(mainMiddleware, ["/product", "/login", "/"]);
+export default withAuth(mainMiddleware, [
+  "/product",
+  "/login",
+  "/",
+  "/product/purchase",
+  "/product/:id*",
+  "/delivery",
+]);
