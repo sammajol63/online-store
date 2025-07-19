@@ -9,7 +9,7 @@ export default function Login() {
 
   return (
     <div className="h-screen flex justify-center items-center bg-gray-200">
-      <div className="bg-white h-96 w-1/4 flex flex-col items-center py-4">
+      <div className="bg-white h-96 w-full max-w-[300px] flex flex-col items-center py-4 px-4">
         <h1>Login</h1>
         <div>
           <button

@@ -81,22 +81,22 @@ export default function PurchasePage() {
   );
 
   return (
-    <div className="h-full w-full py-2 flex flex-row justify-center items-start gap-x-6 gap-y-2 pt-29">
-      <div className="min-h-[420px] w-[250px] rounded-lg border border-gray-300">
+    <div className="h-full w-full py-2 lg:px-20 px-2 flex flex-col md:flex-row justify-center items-start gap-x-6 gap-y-2 pt-29">
+      <div className="hidden xl:block max-w-[250px] min-h-[420px] w-full rounded-lg border border-gray-300">
         <div className="w-full h-12 border-b font-bold flex justify-center items-center border-gray-400">
           {session?.user?.name}
         </div>
       </div>
-      <div className="flex flex-col gap-y-2 ">
+      <div className="flex w-full flex-col gap-y-2 ">
         <div className="font-bold text-xl ">Daftar Transaksi</div>
-        <div className="border border-gray-300 rounded-lg flex flex-col gap-y-3 py-4 px-4 w-[820px] overflow-y-auto scrollbar-auto-hide h-[385px]">
+        <div className="w-full border border-gray-300 rounded-lg flex flex-col gap-y-3 py-4 px-4 overflow-y-auto scrollbar-auto-hide h-[calc(100vh-10rem)] xl:h-[385px]">
           {isLoading ? (
-            <div className="rounded-lg border border-gray-300 w-full h-36 py-3 px-3 flex flex-col item-center justify-center gap-y-5">
+            <div className="rounded-lg border border-gray-300 w-full h-36 py-3 px-3 flex flex-col justify-between gap-y-5">
               {" "}
-              <div className="bg-gray-400 animate-pulse h-2 w-[350px]" />
-              <div className="bg-gray-400 animate-pulse h-2 w-[300px]" />
-              <div className="bg-gray-400 animate-pulse h-2 w-[190px]" />
-              <div className="bg-gray-400 animate-pulse h-2 w-[370px]" />
+              <div className="bg-gray-400 animate-pulse h-2 w-[70%]" />
+              <div className="bg-gray-400 animate-pulse h-2 w-[60%]" />
+              <div className="bg-gray-400 animate-pulse h-2 w-[49%]" />
+              <div className="bg-gray-400 animate-pulse h-2 w-[75%]" />
             </div>
           ) : !hasFetchedPurchase ? null : filterData.length === 0 ? (
             <div className="text-center text-gray-500 py-10">
@@ -106,16 +106,18 @@ export default function PurchasePage() {
             filterData?.map((product, i) => (
               <div
                 key={i}
-                className="rounded-lg border border-gray-300 w-full h-36 py-3 px-3 flex  justify-between"
+                className="rounded-lg border border-gray-300 w-full h-36 py-3 px-3 flex justify-between"
               >
                 <div className="flex flex-col gap-y-2">
-                  <div className=" flex flex-row items-center gap-x-2">
-                    <span className="font-bold text-sm">Belanja</span>
-                    <span className="text-xs">
+                  <div className="flex flex-row items-center gap-x-2">
+                    <span className="font-bold text-sm hidden md:block">
+                      Belanja
+                    </span>
+                    <span className="text-xs hidden md:block">
                       {getReadableDate(product.created_at)}
                     </span>
                     <span
-                      className={`text-xs rounded min-w-16 h-5 px-2 flex items-center justify-center font-bold ${
+                      className={`text-[10px] md:text-xs rounded text-center text-nowrap h-5 px-2 flex items-center justify-center font-bold ${
                         product.status === "Diterima"
                           ? "text-green-500 bg-green-100"
                           : product.status === "Dalam pengiriman"
@@ -125,16 +127,16 @@ export default function PurchasePage() {
                     >
                       {product.status}
                     </span>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-[8px] md:text-xs text-gray-500">
                       {product.order_id}
                     </span>
                   </div>
                   <div className="flex flex-row gap-x-4">
                     <div className="flex flex-col">
-                      <span className="font-bold flex flex-row gap-x-10">
+                      <span className="font-bold flex flex-row md:gap-x-16">
                         {product.items.slice(0, 1).map((item, i) => (
                           <div
-                            className="flex flex-col gap-x-2 gap-y-4"
+                            className="flex flex-col gap-x-2 gap-y-2"
                             key={i}
                           >
                             <div className="flex flex-row items-center gap-x-2">
@@ -148,9 +150,11 @@ export default function PurchasePage() {
                                   loading="lazy"
                                 />
                               ) : null}
-                              <span>{item.name}</span>
+                              <span className="text-[10px] md:text-sm">
+                                {item.name}
+                              </span>
                             </div>
-                            <span className="text-xs text-gray-500">
+                            <span className="text-[11px] md:text-sm text-gray-500">
                               {item.quantity} barang x{" "}
                               {formatRupiah(item.price)}
                             </span>
@@ -163,7 +167,7 @@ export default function PurchasePage() {
                               dispatch(setModalDetailTransaction(true));
                               setIdOrder(product.order_id);
                             }}
-                            className="text-sm text-green-500 hover:underline mt-1 cursor-pointer"
+                            className="text-[12px] md:text-sm text-green-500 hover:underline cursor-pointer"
                           >
                             + Lihat Detail Produk
                           </button>
@@ -174,11 +178,11 @@ export default function PurchasePage() {
                 </div>
                 <div className="flex justify-center items-center flex-col w-1/3 h-full">
                   {product.status === "Dalam pengiriman" ? (
-                    <div className=" w-full flex flex-col justify-center items-center h-full">
-                      <span className="text-gray-500 text-xs mr-2">
+                    <div className="w-full flex flex-col justify-center items-center h-full">
+                      <span className="text-gray-500 text-[12px] md:text-xs mr-2">
                         Total Belanja
                       </span>
-                      <span className="font-bold text-sm">
+                      <span className="font-bold text-[14px] md:text-sm">
                         {formatRupiah(product.gross_amount)}
                       </span>
 
@@ -188,7 +192,7 @@ export default function PurchasePage() {
                             `/delivery?transaction_id=${product.order_id}`
                           )
                         }
-                        className="bg-orange-300 rounded-lg w-36 cursor-pointer h-6 mt-2 text-xs font-bold text-white"
+                        className="bg-orange-300 rounded-lg w-24 xl:w-28 md:w-36 cursor-pointer h-5 md:h-6 mt-2 text-xs font-bold text-white"
                       >
                         Live Tracking
                       </button>
@@ -211,8 +215,8 @@ export default function PurchasePage() {
       </div>
       {modalDetailTransaction && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-[9999]">
-          <div className="w-[500px] h-[420px] flex flex-col items-center bg-white rounded-lg overflow-hidden">
-            <div className="flex justify-between w-full p-4 border-b border-gray-200">
+          <div className="w-full max-w-[500px] h-[420px] flex flex-col md:px-0 px-2 mx-4 items-center bg-white rounded-lg overflow-hidden">
+            <div className="flex justify-between w-full p-4 border-b  border-gray-200">
               <span className="text-sm font-bold">Detail Transaksi</span>
               <button
                 onClick={() => dispatch(setModalDetailTransaction(false))}
@@ -226,7 +230,7 @@ export default function PurchasePage() {
               .map((product, i) => (
                 <div
                   key={i}
-                  className="flex flex-col gap-y-2 w-full bg-white overflow-y-auto scrollbar-auto-hide "
+                  className="flex flex-col gap-y-2 w-full bg-white overflow-y-auto scrollbar-auto-hide"
                 >
                   <div className="flex flex-row items-center gap-x-2 p-4 border-b-7 border-gray-100">
                     <span className="font-bold text-sm">Belanja</span>

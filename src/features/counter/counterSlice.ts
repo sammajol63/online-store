@@ -285,10 +285,10 @@ const initialState: CounterState = {
   logout: false,
   hasFetchedPurchase: false,
   tempQty: 0,
-  isLoadingProduct: false,
-  isLoadingCart: false,
-  isLoadingProductDetail: false,
-  isLoadingPurchase: false,
+  isLoadingProduct: true,
+  isLoadingCart: true,
+  isLoadingProductDetail: true,
+  isLoadingPurchase: true,
 };
 
 export const counterSlice = createSlice({

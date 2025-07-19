@@ -131,25 +131,18 @@ export default function FetchProduct() {
 
   return (
     <div className="flex flex-col justify-center items-center gap-y-3 h-screen pt-28">
-      <div className="w-[1200px] h-full mt-2 px-5 mx-auto grid grid-cols-5 gap-x-10">
+      <div className="w-full h-full mt-2 px-5 mx-auto grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-6 gap-y-6">
         {isLoading || !result ? (
-          <div className="h-64 w-[500px] pl-3 flex flex-row gap-x-12 animate-pulse">
-            <div className="flex flex-col gap-y-1">
-              <div className="bg-gray-500 h-48 w-48 rounded-t-lg"></div>
-              <div className="bg-gray-700 h-2 w-48"></div>
-              <div className="bg-gray-700 h-4 w-48 rounded-b-lg"></div>
-            </div>
-            <div className="flex flex-col gap-y-1">
-              <div className="bg-gray-500 h-48 w-48 rounded-t-lg"></div>
-              <div className="bg-gray-700 h-2 w-48"></div>
-              <div className="bg-gray-700 h-4 w-48 rounded-b-lg"></div>
-            </div>
+          <div className="flex flex-col gap-y-2 w-full px-6 animate-pulse">
+            <div className="bg-gray-300 h-48 w-full rounded-md"></div>
+            <div className="bg-gray-400 h-3 w-3/4 rounded"></div>
+            <div className="bg-gray-400 h-4 w-1/2 rounded"></div>
           </div>
         ) : (
           result.map((products, i) => (
             <div
               key={i}
-              className="place-items-center h-64 w-56 text-center flex flex-col"
+              className="place-items-center max-h-[250px] w-full text-center flex flex-col"
             >
               <Link href={`/product/${products.id}`}>
                 <Image

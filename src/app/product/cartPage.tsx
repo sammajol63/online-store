@@ -250,134 +250,137 @@ export default function CartPage(isOpen: { isOpen: boolean }) {
           </div>
         )}
 
-        <div className="shadow">
-          <table className="text-center w-full table-fixed ">
-            <thead className="bg-gray-100 text-sm uppercase font-bold">
-              <tr>
-                <th className=" px-2 py-2 w-48">Name</th>
-                <th className=" w-28">QTY</th>
-                <th className=" px-2 w-40">Price</th>
-                <th className=" px-2 w-32">ACTION</th>
-              </tr>
-            </thead>
-          </table>
-          <div className="h-[200px] overflow-y-auto scrollbar-auto-hide">
-            <table className="w-full table-fixed text-sm text-center">
-              <tbody>
-                {productAvailable.length === 0 &&
-                productNotAvailable.length === 0 ? (
-                  <tr>
-                    <td
-                      colSpan={4}
-                      className="text-center text-lg py-4 font-bold"
-                    >
-                      Keranjang kosong
-                    </td>
-                  </tr>
-                ) : (
-                  <>
-                    {productAvailable.map((product, index) => (
-                      <tr key={index}>
-                        <td
-                          title={product.name}
-                          className="border-b w-48 border-gray-300 px-2 py-2 truncate"
-                        >
-                          {product.name}
-                        </td>
-                        <td className="border-b border-gray-300 px-2 w-28">
-                          {product.qty}
-                        </td>
-                        <td className="border-b border-gray-300 px-2 w-40">
-                          {formatRupiah(product.price * product.qty)}
-                        </td>
-                        <td className="border-b border-gray-300 w-32 ">
-                          <div className="gap-x-2 flex flex-row justify-center items-center">
-                            <button
-                              onClick={() => {
-                                dispatch(
-                                  UpdateQty({
-                                    user_id: product.user_id,
-                                    operation: "Increment",
-                                    product_id: product.product_id,
-                                  })
-                                );
-                              }}
-                              className="w-5 h-5 text-xl  text-black font-bold cursor-pointer"
-                            >
-                              <FaRegSquarePlus />
-                            </button>
-                            <button
-                              disabled={product.qty <= 1}
-                              onClick={() => {
-                                dispatch(
-                                  UpdateQty({
-                                    user_id: product.user_id,
-                                    operation: "Decrement",
-                                    product_id: product.product_id,
-                                  })
-                                );
-                              }}
-                              className={`cursor-pointer w-5 h-5 text-black font-bold text-xl ${
-                                product.qty <= 1
-                                  ? "text-gray-400"
-                                  : "text-black"
-                              }`}
-                            >
-                              <FaRegSquareMinus />
-                            </button>
-                            <button
-                              className="cursor-pointer text-xl font-bold text-red-500"
-                              onClick={() =>
-                                dispatch(
-                                  DeleteProductCart({
-                                    user_id: product.user_id,
-                                    product_id: product.product_id,
-                                  })
-                                )
-                              }
-                            >
-                              <MdDelete />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                    {productNotAvailable.map((product, index) => (
-                      <tr key={index} className="bg-black/30">
-                        <td className="border-b border-gray-300 px-2 py-2 truncate w-30">
-                          {product.name}
-                        </td>
-                        <td className="border-b border-gray-300 px-2">0</td>
-                        <td className="border-b border-gray-300 px-2">
-                          {formatRupiah(product.price * product.qty)}
-                        </td>
-                        <td className="border-b w-32 border-gray-300 px-2 py-2 gap-x-2">
-                          <div className="flex justify-center items-center flex-row text-[10px]">
-                            Product tidak tersedia
-                            <button
-                              className="w-5 cursor-pointer text-xl font-bold text-red-500"
-                              onClick={() =>
-                                dispatch(
-                                  DeleteProductCart({
-                                    user_id: product.user_id,
-                                    product_id: product.product_id,
-                                  })
-                                )
-                              }
-                            >
-                              <MdDelete />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </>
-                )}
-              </tbody>
+        <div className="shadow w-full overflow-x-auto">
+          <div className="min-w-[600px]">
+            <table className="text-center w-full table-fixed ">
+              <thead className="bg-gray-100 text-sm uppercase font-bold">
+                <tr>
+                  <th className=" px-2 py-2 w-48">Name</th>
+                  <th className=" w-28">QTY</th>
+                  <th className=" px-2 w-40">Price</th>
+                  <th className=" px-2 w-32">ACTION</th>
+                </tr>
+              </thead>
             </table>
-            <div />
+            <div className="h-[200px] overflow-y-auto scrollbar-auto-hide">
+              <table className="w-full table-fixed text-sm text-center">
+                <tbody>
+                  {productAvailable.length === 0 &&
+                  productNotAvailable.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan={4}
+                        className="text-center text-lg py-4 font-bold"
+                      >
+                        Keranjang kosong
+                      </td>
+                    </tr>
+                  ) : (
+                    <>
+                      {productAvailable.map((product, index) => (
+                        <tr key={index}>
+                          <td
+                            title={product.name}
+                            className="border-b w-48 border-gray-300 px-2 py-2 truncate"
+                          >
+                            {product.name}
+                          </td>
+                          <td className="border-b border-gray-300 px-2 w-28">
+                            {product.qty}
+                          </td>
+                          <td className="border-b border-gray-300 px-2 w-40">
+                            {formatRupiah(product.price * product.qty)}
+                          </td>
+                          <td className="border-b border-gray-300 w-32 ">
+                            <div className="gap-x-2 flex flex-row justify-center items-center">
+                              <button
+                                onClick={() => {
+                                  dispatch(
+                                    UpdateQty({
+                                      user_id: product.user_id,
+                                      operation: "Increment",
+                                      product_id: product.product_id,
+                                    })
+                                  );
+                                }}
+                                className="w-5 h-5 text-xl  text-black font-bold cursor-pointer"
+                              >
+                                <FaRegSquarePlus />
+                              </button>
+                              <button
+                                disabled={product.qty <= 1}
+                                onClick={() => {
+                                  dispatch(
+                                    UpdateQty({
+                                      user_id: product.user_id,
+                                      operation: "Decrement",
+                                      product_id: product.product_id,
+                                    })
+                                  );
+                                }}
+                                className={`cursor-pointer w-5 h-5 text-black font-bold text-xl ${
+                                  product.qty <= 1
+                                    ? "text-gray-400"
+                                    : "text-black"
+                                }`}
+                              >
+                                <FaRegSquareMinus />
+                              </button>
+                              <button
+                                className="cursor-pointer text-xl font-bold text-red-500"
+                                onClick={() =>
+                                  dispatch(
+                                    DeleteProductCart({
+                                      user_id: product.user_id,
+                                      product_id: product.product_id,
+                                    })
+                                  )
+                                }
+                              >
+                                <MdDelete />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                      {productNotAvailable.map((product, index) => (
+                        <tr key={index} className="bg-black/30">
+                          <td className="border-b border-gray-300 px-2 py-2 truncate w-30">
+                            {product.name}
+                          </td>
+                          <td className="border-b border-gray-300 px-2">0</td>
+                          <td className="border-b border-gray-300 px-2">
+                            {formatRupiah(product.price * product.qty)}
+                          </td>
+                          <td className="border-b w-32 border-gray-300 px-2 py-2 gap-x-2">
+                            <div className="flex justify-center items-center flex-row text-[10px]">
+                              Product tidak tersedia
+                              <button
+                                className="w-5 cursor-pointer text-xl font-bold text-red-500"
+                                onClick={() =>
+                                  dispatch(
+                                    DeleteProductCart({
+                                      user_id: product.user_id,
+                                      product_id: product.product_id,
+                                    })
+                                  )
+                                }
+                              >
+                                <MdDelete />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </>
+                  )}
+                </tbody>
+              </table>
+              <div />
+            </div>
           </div>
         </div>
+
         <div className="py-2">
           <span className="text-xs font-bold text-gray-700 mr-2">
             ALAMAT PENGIRIMAN
