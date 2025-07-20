@@ -179,20 +179,17 @@ export default function PayAndAddress() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <div className="py-4 w-full flex flex-col items-center">
-        <span className="text-xs font-bold text-gray-500 mb-1">
-          Alamat Pengirim
-        </span>
+    <div className="flex flex-col w-full items-center justify-center">
+      <div className="py-4 w-full flex flex-col items-end-start">
         <input
           type="text"
-          className="text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-gray-300 w-[200px]"
-          placeholder="Masukkan Alamat Tujuan..."
+          className="text-xs border border-gray-300 text-gray-400 rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-gray-300 w-full"
+          placeholder="Tulis Nama Alamat"
           value={searchAlamat}
           onChange={(e) => setSearchAlamat(e.target.value)}
         />
         {suggestions.length > 0 && (
-          <ul className="z-10 bg-white border w-64 max-h-60 overflow-y-auto text-sm mt-2">
+          <ul className="z-10 bg-white w-[220px] max-h-60 overflow-y-auto text-sm mt-2">
             {suggestions.map((item, index) => (
               <li
                 key={index}
@@ -206,12 +203,12 @@ export default function PayAndAddress() {
         )}
 
         {selected && (
-          <div className="mt-2 text-sm text-gray-700 text-center">
-            <strong>Alamat dipilih:</strong>
+          <div className="mt-2 text-xs shadow w-full min-h-[100px] flex flex-col gap-y-2 items-start p-2 rounded-lg">
+            <p className="text-gray-500">ALAMAT PENGIRIMAN</p>
             <p>{selected.display_name}</p>
-            <p>
+            {/* <p>
               Koordinat: {selected.lat}, {selected.lon}
-            </p>
+            </p> */}
           </div>
         )}
       </div>

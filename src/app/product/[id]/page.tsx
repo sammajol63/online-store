@@ -13,7 +13,6 @@ import { useParams } from "next/navigation";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store";
 import Image from "next/image";
-import { FiLoader } from "react-icons/fi";
 
 import PayAndAddress from "@/app/buttonPay/page";
 import CartPage from "../cartPage";
@@ -107,7 +106,13 @@ export default function DetailProduct() {
   return (
     <div className="flex justify-center h-full w-full pt-28">
       {isLoading || !product ? (
-        <FiLoader className="mt-36 text-[120px] font-gray-300 text-gray-500 rounded animate-spin" />
+        <div className="w-full max-w-[1200px] h-full flex justify-center pt-10">
+          <div className="h-full w-[300px] flex flex-col gap-y-1.5 rounded-lg  bg-white animate-pulse">
+            <div className="bg-gray-300 w-[300px] rounded-t-lg h-[250px]" />
+            <div className="bg-gray-500 w-[300px] h-[10px]" />
+            <div className="bg-gray-300 w-[300px] rounded-b-lg h-[30px]" />
+          </div>
+        </div>
       ) : (
         <div className="flex justify-center gap-x-6 xl:flex-row flex-col h-full max-w-[1200px] w-full mx-auto xl:mt-2">
           <div

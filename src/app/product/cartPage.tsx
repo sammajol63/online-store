@@ -382,18 +382,18 @@ export default function CartPage(isOpen: { isOpen: boolean }) {
         </div>
 
         <div className="py-2">
-          <span className="text-xs font-bold text-gray-700 mr-2">
+          <span className="text-xs font-bold text-gray-500 mr-2">
             ALAMAT PENGIRIMAN
           </span>
           <input
             type="text"
-            className="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-gray-300"
-            placeholder="Masukkan Alamat Tujuan..."
+            className="text-sm border border-gray-300 rounded w-full px-2 py-1 focus:outline-none focus:ring-1 focus:ring-gray-300"
+            placeholder="Tulis Nama Alamat"
             value={searchAlamat}
             onChange={(e) => setSearchAlamat(e.target.value)}
           />
           {suggestions.length > 0 && (
-            <ul className="absolute z-10 bg-white border w-full max-h-60 overflow-y-auto text-sm">
+            <ul className="absolute z-10 bg-white w-[365px] max-h-60 overflow-y-auto text-sm">
               {suggestions.map((item, index) => (
                 <li
                   key={index}
@@ -410,9 +410,9 @@ export default function CartPage(isOpen: { isOpen: boolean }) {
             <div className="mt-2 text-sm bg-gray-50 p-1">
               <strong>Alamat dipilih:</strong>
               <p className="text-xs">{selected.display_name}</p>
-              <p className="text-xs">
+              {/* <p className="text-xs">
                 Koordinat: {selected.lat}, {selected.lon}
-              </p>
+              </p> */}
             </div>
           )}
         </div>
